@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-ink;
+  }
+  ::selection {
+    background: theme('colors.accent.tint');
+  }
+  *:focus-visible {
+    outline: 2px solid theme('colors.accent.DEFAULT');
+    outline-offset: 1px;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-ink text-white hover:bg-black;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-ink border border-line hover:border-line-strong;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:bg-danger;
+  }
+  .btn-ghost {
+    @apply btn text-ink-muted hover:text-ink hover:bg-black/5;
+  }
+  .input {
+    @apply w-full rounded-sm border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-accent;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted;
+  }
+  .card {
+    @apply rounded-lg border border-line bg-surface shadow-card;
+  }
+  .table-shell {
+    @apply w-full text-left text-sm;
+  }
+  .table-shell th {
+    @apply border-b border-line px-4 py-3 text-xs font-semibold uppercase tracking-wide text-ink-muted;
+  }
+  .table-shell td {
+    @apply border-b border-line/70 px-4 py-3 text-sm;
+  }
+  .table-shell tr:hover td {
+    @apply bg-black/[0.02];
+  }
+  .data-num {
+    @apply font-mono text-[13px] tabular-nums;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+}
