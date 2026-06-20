@@ -192,9 +192,14 @@ export default function Sales() {
 
   async function load() {
     setLoading(true);
-    const res = await api.get<{ data: SaleRow[] }>('/sales');
-    setItems(res.data);
-    setLoading(false);
+    try {
+      const res = await api.get<{ data: SaleRow[] }>('/sales');
+      setItems(res.data);
+    } catch (err) {
+      toast.error(err instanceof ApiClientError ? err.message : 'Could not load sales.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {

@@ -25,12 +25,17 @@ export default function Invoices() {
 
   async function load() {
     setLoading(true);
-    const params = new URLSearchParams();
-    if (from) params.set('from', from);
-    if (to) params.set('to', to);
-    const res = await api.get<{ data: InvoiceRow[] }>(`/invoices?${params.toString()}`);
-    setItems(res.data);
-    setLoading(false);
+    try {
+      const params = new URLSearchParams();
+      if (from) params.set('from', from);
+      if (to) params.set('to', to);
+      const res = await api.get<{ data: InvoiceRow[] }>(`/invoices?${params.toString()}`);
+      setItems(res.data);
+    } catch (err) {
+      toast.error(err instanceof ApiClientError ? err.message : 'Could not load invoices.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {

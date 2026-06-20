@@ -209,9 +209,14 @@ export default function Settings() {
 
   async function load() {
     setLoading(true);
-    const res = await api.get<{ data: Company[] }>('/companies');
-    setCompanies(res.data);
-    setLoading(false);
+    try {
+      const res = await api.get<{ data: Company[] }>('/companies');
+      setCompanies(res.data);
+    } catch (err) {
+      toast.error(err instanceof ApiClientError ? err.message : 'Could not load company profiles.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {

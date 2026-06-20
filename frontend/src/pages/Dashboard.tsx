@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '../lib/api';
+import toast from 'react-hot-toast';
+import { api, ApiClientError } from '../lib/api';
 import { money, formatDate } from '../lib/format';
 import { PageHeader, StatCard, EmptyState } from '../components/ui';
 
@@ -24,9 +25,17 @@ interface Summary {
 
 export default function Dashboard() {
   const [summary, setSummary] = useState<Summary | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    api.get<{ data: Summary }>('/dashboard/summary').then((res) => setSummary(res.data));
+    api
+      .get<{ data: Summary }>('/dashboard/summary')
+      .then((res) => setSummary(res.data))
+      .catch((err) => {
+        const message = err instanceof ApiClientError ? err.message : 'Could not reach the server.';
+        setError(message);
+        toast.error(message);
+      });
   }, []);
 
   return (
@@ -34,7 +43,7 @@ export default function Dashboard() {
       <PageHeader title="Dashboard" subtitle="A snapshot of stock, sales, and billing." />
       <div className="px-8 py-6">
         {!summary ? (
-          <p className="text-sm text-ink-muted">Loading…</p>
+          <p className="text-sm text-ink-muted">{error ? `Couldn't load dashboard: ${error}` : 'Loading…'}</p>
         ) : (
           <>
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

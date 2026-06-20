@@ -186,9 +186,14 @@ export default function Stock() {
 
   async function load() {
     setLoading(true);
-    const res = await api.get<{ data: StockItem[] }>(`/stock?search=${encodeURIComponent(search)}`);
-    setItems(res.data);
-    setLoading(false);
+    try {
+      const res = await api.get<{ data: StockItem[] }>(`/stock?search=${encodeURIComponent(search)}`);
+      setItems(res.data);
+    } catch (err) {
+      toast.error(err instanceof ApiClientError ? err.message : 'Could not load stock.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
