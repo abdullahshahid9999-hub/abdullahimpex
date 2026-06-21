@@ -1,6 +1,11 @@
 import { supabase } from './supabaseClient';
 
-const BASE_URL = import.meta.env.VITE_API_URL as string;
+// Strip any trailing slash so a value like "https://api.example.com/"
+// doesn't produce double-slash URLs (e.g. ".../dashboard/summary") —
+// a double slash triggers a redirect on Vercel, and browsers refuse to
+// follow redirects during a CORS preflight, which surfaces as a
+// confusing "blocked by CORS policy" error instead of the real cause.
+const BASE_URL = (import.meta.env.VITE_API_URL as string).replace(/\/+$/, '');
 
 export class ApiClientError extends Error {
   status: number;
